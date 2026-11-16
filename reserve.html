@@ -23,5 +23,157 @@
             <li><a href="about.html">About</a></li>
         </ul>
     </div>
+
+    <main class="reserve-page">
+        <h1>Reserve</h1>
+        <p class="reserve-intro">Choose a day for your visit.</p>
+
+        <section class="reservation-calendar" aria-label="Choose a reservation date">
+            <div class="calendar-header">
+                <button class="calendar-nav" id="previous-month" type="button" aria-label="Previous month">&lsaquo;</button>
+                <h2 id="calendar-month" aria-live="polite"></h2>
+                <button class="calendar-nav" id="next-month" type="button" aria-label="Next month">&rsaquo;</button>
+            </div>
+            <div class="calendar-grid calendar-weekdays" aria-hidden="true">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span>
+                <span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+            <div class="calendar-grid" id="calendar-days" role="group" aria-label="Calendar dates"></div>
+            <p class="selected-date" id="selected-date" aria-live="polite">Select a date to get started.</p>
+        </section>
+
+        <form class="reservation-time" id="reservation-form" aria-labelledby="reservation-time-heading">
+            <h2 id="reservation-time-heading">Choose a Time</h2>
+            <label for="reservation-time">Available times</label>
+            <select id="reservation-time" name="reservation-time" required>
+                <option value="">Select a time</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="12:30">12:30 PM</option>
+                <option value="13:00">1:00 PM</option>
+                <option value="13:30">1:30 PM</option>
+                <option value="14:00">2:00 PM</option>
+                <option value="14:30">2:30 PM</option>
+                <option value="15:00">3:00 PM</option>
+                <option value="15:30">3:30 PM</option>
+                <option value="16:00">4:00 PM</option>
+                <option value="16:30">4:30 PM</option>
+                <option value="17:00">5:00 PM</option>
+                <option value="17:30">5:30 PM</option>
+                <option value="18:00">6:00 PM</option>
+                <option value="18:30">6:30 PM</option>
+                <option value="19:00">7:00 PM</option>
+                <option value="19:30">7:30 PM</option>
+                <option value="20:00">8:00 PM</option>
+                <option value="20:30">8:30 PM</option>
+                <option value="21:00">9:00 PM</option>
+                <option value="21:30">9:30 PM</option>
+                <option value="22:00">10:00 PM</option>
+                <option value="22:30">10:30 PM</option>
+            </select>
+            <button class="reservation-submit" type="submit">Submit Reservation</button>
+        </form>
+        <p class="reservation-status" id="reservation-status" aria-live="polite"></p>
+    </main>
+
+    <script>
+        const calendarMonth = document.getElementById("calendar-month");
+        const calendarDays = document.getElementById("calendar-days");
+        const selectedDateText = document.getElementById("selected-date");
+        const reservationForm = document.getElementById("reservation-form");
+        const reservationTime = document.getElementById("reservation-time");
+        const reservationStatus = document.getElementById("reservation-status");
+        const previousMonthButton = document.getElementById("previous-month");
+        const nextMonthButton = document.getElementById("next-month");
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        let displayedMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+        let selectedDate = null;
+
+        function renderCalendar() {
+            const year = displayedMonth.getFullYear();
+            const month = displayedMonth.getMonth();
+            const firstWeekday = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            calendarMonth.textContent = displayedMonth.toLocaleDateString(undefined, {
+                month: "long",
+                year: "numeric"
+            });
+            calendarDays.replaceChildren();
+
+            for (let blankDay = 0; blankDay < firstWeekday; blankDay += 1) {
+                const blank = document.createElement("span");
+                blank.className = "calendar-empty";
+                blank.setAttribute("aria-hidden", "true");
+                calendarDays.appendChild(blank);
+            }
+
+            for (let day = 1; day <= daysInMonth; day += 1) {
+                const date = new Date(year, month, day);
+                const dateButton = document.createElement("button");
+                const dateKey = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                dateButton.type = "button";
+                dateButton.className = "calendar-day";
+                dateButton.textContent = day;
+                dateButton.setAttribute("aria-label", date.toLocaleDateString(undefined, {
+                    dateStyle: "full"
+                }));
+                dateButton.setAttribute("aria-pressed", String(selectedDate === dateKey));
+                dateButton.disabled = date < today;
+
+                if (selectedDate === dateKey) {
+                    dateButton.classList.add("is-selected");
+                }
+
+                dateButton.addEventListener("click", function () {
+                    selectedDate = dateKey;
+                    selectedDateText.textContent = `Selected date: ${date.toLocaleDateString(undefined, {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    })}`;
+                    renderCalendar();
+                });
+                calendarDays.appendChild(dateButton);
+            }
+
+            previousMonthButton.disabled =
+                year === today.getFullYear() && month === today.getMonth();
+        }
+
+        previousMonthButton.addEventListener("click", function () {
+            displayedMonth = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth() - 1, 1);
+            renderCalendar();
+        });
+
+        nextMonthButton.addEventListener("click", function () {
+            displayedMonth = new Date(displayedMonth.getFullYear(), displayedMonth.getMonth() + 1, 1);
+            renderCalendar();
+        });
+
+        reservationForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (!selectedDate) {
+                selectedDateText.textContent = "Please select a date on the calendar first.";
+                return;
+            }
+
+            const [year, month, day] = selectedDate.split("-").map(Number);
+            const date = new Date(year, month - 1, day);
+            const formattedDate = date.toLocaleDateString(undefined, {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric"
+            });
+            const selectedTime = reservationTime.options[reservationTime.selectedIndex].text;
+            reservationStatus.textContent =
+                `Demo reservation selected for ${formattedDate} at ${selectedTime}.`;
+        });
+
+        renderCalendar();
+    </script>
 </body>
 </html>
