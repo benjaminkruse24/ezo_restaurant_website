@@ -8,32 +8,162 @@
 body{
     font-family: Arial, sans-serif;
     background-color: #fff;
-    padding: 20px;
+    padding: 0;
+    margin: 0;
 }
 .hero-section {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 30vh;
+    min-height: 220px;
     background-color: #f5f5f5;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 0;
+}
+
+.hero-title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1em;
+}
+
+.hero-title-group h1 {
+    margin: 0;
+    line-height: 0.9;
 }
 .navbar {
-    position: absolute;
+    position: sticky;
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px;
-    background-color: #000000;
+    height: 52px;
+    background: linear-gradient(110deg, #03291f, #06402f 55%, #03291f);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.navbar ul {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.navbar li {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.navbar a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    padding: 10px 0;
+    min-height: 100%;
+}
+
+.navbar a:hover,
+.navbar a:focus,
+.navbar a:active {
+    color: #e8d6a5;
+    text-decoration: underline;
+    outline: none;
 }
 
 .logo {
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.logo img {
+    display: block;
+    max-height: 44px;
+    width: auto;
+    object-fit: contain;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 400;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+}
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    padding: 48px 24px;
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.78)),
+        url("food-image.jpg") center / cover no-repeat;
+}
+
+.text-module {
+    max-width: 720px;
+    text-align: center;
+}
+
+.text-module h2 {
+    margin-bottom: 16px;
+}
+
+.text-module p {
+    line-height: 1.6;
+}
+
+table {
+    width: calc(100% - 48px);
+    max-width: 800px;
+    margin: 32px auto;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 12px 16px;
+    text-align: center;
+}
+
+th {
+    font-family: "Playfair Display", Georgia, serif;
+    font-weight: 600;
+}
+
+.site-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 72px;
+    background: linear-gradient(110deg, #03291f, #06402f 55%, #03291f);
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
 }
