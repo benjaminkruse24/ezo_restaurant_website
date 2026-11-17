@@ -201,11 +201,25 @@ h1 {
     background-color: #fff;
 }
 
+.menu-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
 .menu-item h3,
 .menu-item h4 {
-    margin-bottom: 8px;
+    margin: 0;
     color: #183d2e;
     font-size: 1.15rem;
+}
+
+.menu-price {
+    color: #06402f;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .menu-subheading {
